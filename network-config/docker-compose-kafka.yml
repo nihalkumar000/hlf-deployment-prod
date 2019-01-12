@@ -6,6 +6,20 @@ networks:
 
 services:
 
+    ca.example.com:
+        image: hyperledger/fabric-ca
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca.example.com
+            - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
+            - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2cea50a5f11fb0817f57d48266aa2ce24e9738ad38faf84d4284af52719439ea_sk
+        ports:
+            - "7054:7054"
+        command: sh -c 'fabric-ca-server start -b admin:adminpw'
+        volumes:
+            - ../crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+        container_name: ca.example.com
+
     zookeeper0:
         extends:
             file: docker-compose-base.yml
