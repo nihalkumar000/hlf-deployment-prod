@@ -14,6 +14,7 @@ Following are the steps to confire and deploy the cluster
 
 ---
 
+
 ## 1. Generate configs
 
 ### 1.1 Setup Env
@@ -60,6 +61,7 @@ configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./config/Org1MSPanc
 
 ---
 
+
 ## 2. Deploy dockers
 
 ### 2.1 Add ca certificate info
@@ -87,6 +89,7 @@ docker-compose -f deployment/docker-compose-cli.yaml up -d
 ```
 
 ---
+
 
 ## 3 Setup channel
 
@@ -133,7 +136,12 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/h
 
 ### 3.5 Join pee2 to channel
 
+```
+docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/hyperledger/users/Admin@org1.example.com/msp" peer2.org1.example.com peer channel join -b mychannel.block
+```
+
 ---
+
 
 ## 4. Install chaincode
 
@@ -178,6 +186,7 @@ docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 
 ---
 
+
 ## 5. Instantiate chaincode
 
 Now we need to instatiate chaincode on channel. No need to do this with each
@@ -188,6 +197,7 @@ docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C m
 ```
 
 ---
+
 
 ## 6. Do transactions 
 
