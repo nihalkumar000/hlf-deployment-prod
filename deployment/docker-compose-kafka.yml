@@ -12,13 +12,17 @@ services:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
             - FABRIC_CA_SERVER_CA_NAME=ca.example.com
             - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
-            - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/73c0730c0661b906fd6e266407e7a1d0f40b26ab1d5e3ea3155bb6e82688188a_sk
+            - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/e92ef8b3d04d0badfa852d72c0f4ad4503513bcd6b4ca28aabbee98d5adfad0c_sk
         ports:
             - "7054:7054"
         command: sh -c 'fabric-ca-server start -b admin:adminpw'
         volumes:
             - ../crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
         container_name: ca.example.com
+        networks:
+          behave:
+             aliases:
+               - ${CORE_PEER_NETWORKID}
 
     zookeeper0:
         extends:
@@ -157,7 +161,7 @@ services:
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls:/var/hyperledger/tls
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
         depends_on:
             - kafka0
             - kafka1
@@ -190,7 +194,7 @@ services:
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls:/var/hyperledger/tls
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
         depends_on:
             - kafka0
             - kafka1
@@ -221,7 +225,7 @@ services:
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls:/var/hyperledger/tls
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
         depends_on:
             - kafka0
             - kafka1
@@ -255,7 +259,7 @@ services:
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/var/hyperledger/tls
             - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
 
         depends_on:
             - orderer0.example.com
@@ -289,7 +293,7 @@ services:
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/var/hyperledger/tls
             - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
         depends_on:
             - orderer0.example.com
             - orderer1.example.com
@@ -324,7 +328,7 @@ services:
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/var/hyperledger/tls
             - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../config/:/var/hyperledger/configs
+            - ../network-config/:/var/hyperledger/configs
         depends_on:
             - orderer0.example.com
             - orderer1.example.com
