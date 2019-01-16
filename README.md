@@ -12,6 +12,8 @@ configurations. Following is the network structure
 
 Following are the steps to confire and deploy the cluster
 
+---
+
 ## 1. Generate configs
 
 ### 1.1 Setup Env
@@ -56,6 +58,8 @@ only org1, if there are mutiple orgs, do this step for all orgs(ex org1, org2 et
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
 ```
 
+---
+
 ## 2. Deploy dockers
 
 ### 2.1 Add ca certificate info
@@ -81,6 +85,8 @@ Now we can start the fabric network and cli container
 docker-compose -f deployment/docker-compose-kafka.yaml up -d
 docker-compose -f deployment/docker-compose-cli.yaml up -d
 ```
+
+---
 
 ## 3 Setup channel
 
@@ -127,6 +133,7 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/h
 
 ### 3.5 Join pee2 to channel
 
+---
 
 ## 4. Install chaincode
 
@@ -169,7 +176,9 @@ docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
-## Instantiate chaincode
+---
+
+## 5. Instantiate chaincode
 
 Now we need to instatiate chaincode on channel. No need to do this with each
 and every peer, only need to do once on the channel.
@@ -178,12 +187,14 @@ and every peer, only need to do once on the channel.
 docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C mychannel -n mycc github.com/chaincode -v v0 -c '{"Args": ["a", "100"]}'
 ```
 
-## 5. Do transactions 
+---
+
+## 6. Do transactions 
 
 Now our network is ready we can do invoke/query transactions with the installed 
 chaincode 
 
-### 5.1 Invoke
+### 6.1 Invoke
 
 With `invoke` chaincode can modify the state of the variables in ledger. Each 
 'invoke' transaction will be added to the 'block' in the ledge (update ledger state).
@@ -196,7 +207,7 @@ connected to peer0 and executed below invoke transaction
 docker exec -it cli peer chaincode invoke -o orderer0.example.com:7050 -n mycc -c '{"Args":["set", "a", "20"]}' -C mychannel
 ```
 
-### 5.2 Query 
+### 6.2 Query 
 
 With `query` chain code will read the current state and send it back to user. This 
 transaction is not saved in blockchain (not update ledger state)
@@ -207,3 +218,5 @@ Now I'm execuring this query by connecting to peer2
 # added - CORE_PEER_ADDRESS=peer1.org1.example.com:7051 in cli container
 docker exec -it cli peer chaincode query -n mycc -c '{"Args":["query","a"]}' -C mychannel
 ```
+
+---
