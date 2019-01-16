@@ -50,7 +50,7 @@ configtxgen -profile OneOrgsOrdererGenesis -outputBlock ./config/orderer.block
 configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./config/channel.tx -channelID mychannel
 ```
 
-###1.5 generate anchor peer transaction 
+### 1.5 generate anchor peer transaction 
 
 Need to generate anchor peer transactions for each org. In his case we have
 only org1, if there are mutiple orgs, do this step for all orgs(ex org1, org2 etc)
@@ -72,10 +72,10 @@ configs which generated via cryptogen to ca service defines in
 `crypto/peerOrganizations/org1.example.com/ca` directory
 
 ```
-# defines certificate autorities ca file, this file generates by cryptogen
+// defines certificate autorities ca file, this file generates by cryptogen
 - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
 
-# defines certificate authorities key file, this files generates by cryptogen
+// defines certificate authorities key file, this files generates by cryptogen
 - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/73c0730c0661b906fd6e266407e7a1d0f40b26ab1d5e3ea3155bb6e82688188a_sk
 ```
 
@@ -157,30 +157,30 @@ peers defines with `CORE_PEER_ADDRESS` env varirable on cli container
 ### 4.1. Install on peer0 
 
 ```
-# define connecting peer to peer0 on docker-compose-cli 
+// define connecting peer to peer0 on docker-compose-cli 
 - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
 
-# install chaincode
+// install chaincode
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
 ### 4.2 Install on peer1 
 
 ```
-# define connecting peer to peer1 on docker-compose-cli 
+// define connecting peer to peer1 on docker-compose-cli 
 - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
 
-# install chaincode
+// install chaincode
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
 ### 4.3 Install on peer2
 
 ```
-# define connecting peer to peer2 on docker-compose-cli 
+// define connecting peer to peer2 on docker-compose-cli 
 - CORE_PEER_ADDRESS=peer2.org1.example.com:7051
 
-# install chaincode
+// install chaincode
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
@@ -213,7 +213,7 @@ You can connect to any peer and do invoke/query transations. IN here I'm
 connected to peer0 and executed below invoke transaction
 
 ```
-# added - CORE_PEER_ADDRESS=peer0.org1.example.com:7051 in cli container
+// added - CORE_PEER_ADDRESS=peer0.org1.example.com:7051 in cli container
 docker exec -it cli peer chaincode invoke -o orderer0.example.com:7050 -n mycc -c '{"Args":["set", "a", "20"]}' -C mychannel
 ```
 
@@ -225,7 +225,7 @@ transaction is not saved in blockchain (not update ledger state)
 Now I'm execuring this query by connecting to peer2
 
 ```
-# added - CORE_PEER_ADDRESS=peer1.org1.example.com:7051 in cli container
+// added - CORE_PEER_ADDRESS=peer1.org1.example.com:7051 in cli container
 docker exec -it cli peer chaincode query -n mycc -c '{"Args":["query","a"]}' -C mychannel
 ```
 
