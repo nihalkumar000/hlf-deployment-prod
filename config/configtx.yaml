@@ -21,12 +21,12 @@ Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: ../crypto-config/ordererOrganizations/example.com/msp
+        MSPDir: ../crypto/ordererOrganizations/example.com/msp
 
     - &Org1
         Name: Org1MSP
         ID: Org1MSP
-        MSPDir: ../crypto-config/peerOrganizations/org1.example.com/msp
+        MSPDir: ../crypto/peerOrganizations/org1.example.com/msp
         AnchorPeers:
             - Host: peer0.org1.example.com
               Port: 7051
