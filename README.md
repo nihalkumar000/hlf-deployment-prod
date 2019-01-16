@@ -1,4 +1,4 @@
-# Fabric Network
+# Hyperledger fabric deployment 
 
 This project contains the production ready hyperldger fabric deployment
 configurations. Following is the network structure
