@@ -17,7 +17,7 @@ Following are the steps to confire and deploy the cluster
 
 ## 1. Generate configs
 
-### 1.1 Setup Env
+#### 1.1 Setup Env
 
 In order to generate certificates, genesis block, channel config transactions
 we need to use scripts on `bin` directory. Need add bin to $PATH and define the
@@ -28,7 +28,7 @@ export PATH=${PWD}/bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}/config
 ```
 
-### 1.2 Generate crypto
+#### 1.2 Generate crypto
 
 Now we need to generate crypto metirials for our orders, peers, ca etc. 
 
@@ -36,7 +36,7 @@ Now we need to generate crypto metirials for our orders, peers, ca etc.
 cryptogen generate --config=./config/crypto-config.yaml
 ```
 
-### 1.3 Generate genisis block 
+#### 1.3 Generate genisis block 
 
 Need to generate genesis block for orders
 
@@ -44,13 +44,13 @@ Need to generate genesis block for orders
 configtxgen -profile OneOrgsOrdererGenesis -outputBlock ./config/orderer.block
 ```
 
-### 1.4 generate channel configuration transaction
+#### 1.4 generate channel configuration transaction
 
 ```
 configtxgen -profile OneOrgsChannel -outputCreateChannelTx ./config/channel.tx -channelID mychannel
 ```
 
-### 1.5 generate anchor peer transaction 
+#### 1.5 generate anchor peer transaction 
 
 Need to generate anchor peer transactions for each org. In his case we have
 only org1, if there are mutiple orgs, do this step for all orgs(ex org1, org2 etc)
@@ -64,7 +64,7 @@ configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./config/Org1MSPanc
 
 ## 2. Deploy dockers
 
-### 2.1 Add ca certificate info
+#### 2.1 Add ca certificate info
 
 Before start the services with docker compose, we need to add the CA certificate
 configs which generated via cryptogen to ca service defines in
@@ -79,7 +79,7 @@ configs which generated via cryptogen to ca service defines in
 - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/73c0730c0661b906fd6e266407e7a1d0f40b26ab1d5e3ea3155bb6e82688188a_sk
 ```
 
-### 2.2 Start network
+#### 2.2 Start network
 
 Now we can start the fabric network and cli container
 
@@ -91,9 +91,9 @@ docker-compose -f deployment/docker-compose-cli.yaml up -d
 ---
 
 
-## 3 Setup channel
+## 3. Setup channel
 
-### 3.1 create channel
+#### 3.1 create channel
 
 We are creating the channel with using channel.tx which generates previously 
 on 2nd section. 
@@ -104,13 +104,13 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/h
 
 Next we need to join all of our peers(3 peers) into this channel.  
 
-### 3.2 Join peer0 to channel
+#### 3.2 Join peer0 to channel
 
 ```
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/hyperledger/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel join -b mychannel.block
 ```
 
-### 3.3 Copy mychannel.block 
+#### 3.3 Copy mychannel.block 
 
 when creating channel with peero.org1.example.com, it generates `mychanell.block` 
 file inside peer0.org1.example.com container, we need to copy that file into 
@@ -128,13 +128,13 @@ rm mychannel.block
 if you use cli container to create channel and join peers, you don't need to copy
 the files - https://hyperledger-fabric.readthedocs.io/en/stable/install_instantiate.html
 
-### 3.4 Join peer1 to channel
+#### 3.4 Join peer1 to channel
 
 ```
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/hyperledger/users/Admin@org1.example.com/msp" peer1.org1.example.com peer channel join -b mychannel.block
 ```
 
-### 3.5 Join pee2 to channel
+#### 3.5 Join pee2 to channel
 
 ```
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/hyperledger/users/Admin@org1.example.com/msp" peer2.org1.example.com peer channel join -b mychannel.block
@@ -154,7 +154,7 @@ peers defines with `CORE_PEER_ADDRESS` env varirable on cli container
 - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
 ```
 
-### 4.1. Install on peer0 
+#### 4.1. Install on peer0 
 
 ```
 // define connecting peer to peer0 on docker-compose-cli 
@@ -164,7 +164,7 @@ peers defines with `CORE_PEER_ADDRESS` env varirable on cli container
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
-### 4.2 Install on peer1 
+#### 4.2 Install on peer1 
 
 ```
 // define connecting peer to peer1 on docker-compose-cli 
@@ -174,7 +174,7 @@ docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
-### 4.3 Install on peer2
+#### 4.3 Install on peer2
 
 ```
 // define connecting peer to peer2 on docker-compose-cli 
@@ -204,7 +204,7 @@ docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C m
 Now our network is ready we can do invoke/query transactions with the installed 
 chaincode 
 
-### 6.1 Invoke
+#### 6.1 Invoke
 
 With `invoke` chaincode can modify the state of the variables in ledger. Each 
 'invoke' transaction will be added to the 'block' in the ledge (update ledger state).
@@ -217,7 +217,7 @@ connected to peer0 and executed below invoke transaction
 docker exec -it cli peer chaincode invoke -o orderer0.example.com:7050 -n mycc -c '{"Args":["set", "a", "20"]}' -C mychannel
 ```
 
-### 6.2 Query 
+#### 6.2 Query 
 
 With `query` chain code will read the current state and send it back to user. This 
 transaction is not saved in blockchain (not update ledger state)
