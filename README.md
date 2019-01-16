@@ -12,7 +12,6 @@ configurations. Following is the network structure
 
 Following are the steps to configure and deploy the cluster
 
----
 
 
 ## 1. Generate configs
@@ -59,7 +58,6 @@ only `org1`, if there are mutiple orgs, do this step for all orgs(ex org1, org2 
 configtxgen -profile OneOrgsChannel -outputAnchorPeersUpdate ./config/Org1MSPanchors.tx -channelID mychannel -asOrg Org1MSP
 ```
 
----
 
 
 ## 2. Deploy dockers
@@ -87,7 +85,6 @@ docker-compose -f deployment/docker-compose-kafka.yaml up -d
 docker-compose -f deployment/docker-compose-cli.yaml up -d
 ```
 
----
 
 
 ## 3. Setup channel
@@ -137,7 +134,6 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/h
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/hyperledger/users/Admin@org1.example.com/msp" peer2.org1.example.com peer channel join -b mychannel.block
 ```
 
----
 
 
 ## 4. Install chaincode
@@ -181,7 +177,6 @@ docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
 ```
 
----
 
 
 ## 5. Instantiate chaincode
@@ -193,7 +188,6 @@ and every peer, only need to do once on the channel.
 docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C mychannel -n mycc github.com/chaincode -v v0 -c '{"Args": ["a", "100"]}'
 ```
 
----
 
 
 ## 6. Do transactions 
@@ -225,5 +219,3 @@ Now I'm execuring `query` by connecting to `peer2`
 // added - CORE_PEER_ADDRESS=peer1.org1.example.com:7051 in cli container
 docker exec -it cli peer chaincode query -n mycc -c '{"Args":["query","a"]}' -C mychannel
 ```
-
----
