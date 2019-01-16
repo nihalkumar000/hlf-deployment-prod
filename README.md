@@ -4,10 +4,10 @@ This project contains the production ready hyperldger fabric deployment
 configurations. Following is the network structure
 
 ```
-1. one org (org1)
-2. three peers (peer0.org1.example.com, peer1.org1.example.com, peer2.org1.example)
-3. one ca
-4. three oreders with kafka
+- 1 org (org1)
+- 3 peers (peer0.org1.example.com, peer1.org1.example.com, peer2.org1.example)
+- 1 ca
+- 3 oreders with kafka
 ```
 
 Following are the steps to confire and deploy the cluster
