@@ -81,8 +81,8 @@ and keys can be found in `crypto/peerOrganizations/org1.example.com/ca` director
 Now we can start the fabric network and cli container
 
 ```
-docker-compose -f deployment/docker-compose-kafka.yaml up -d
-docker-compose -f deployment/docker-compose-cli.yaml up -d
+docker-compose -f deployment/docker-compose-kafka.yml up -d
+docker-compose -f deployment/docker-compose-cli.yml up -d
 ```
 
 
