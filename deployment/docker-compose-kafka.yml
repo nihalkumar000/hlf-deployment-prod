@@ -13,6 +13,10 @@ services:
             - FABRIC_CA_SERVER_CA_NAME=ca.example.com
             - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.example.com-cert.pem
             - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/e92ef8b3d04d0badfa852d72c0f4ad4503513bcd6b4ca28aabbee98d5adfad0c_sk
+        extra_hosts:
+            - "peer0.org1.example.com:172.31.26.5"
+            - "peer1.org1.example.com:172.31.20.177"
+            - "peer2.org1.example.com:172.31.27.143"
         ports:
             - "7054:7054"
         command: sh -c 'fabric-ca-server start -b admin:adminpw'
@@ -158,6 +162,10 @@ services:
             - ORDERER_GENERAL_GENESISPROFILE=SampleInsecureKafka
             - ORDERER_ABSOLUTEMAXBYTES=${ORDERER_ABSOLUTEMAXBYTES}
             - ORDERER_PREFERREDMAXBYTES=${ORDERER_PREFERREDMAXBYTES}
+        extra_hosts:
+            - "peer0.org1.example.com:172.31.26.5"
+            - "peer1.org1.example.com:172.31.20.177"
+            - "peer2.org1.example.com:172.31.27.143"
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls:/var/hyperledger/tls
@@ -191,6 +199,10 @@ services:
             - ORDERER_GENERAL_GENESISPROFILE=SampleInsecureKafka
             - ORDERER_ABSOLUTEMAXBYTES=${ORDERER_ABSOLUTEMAXBYTES}
             - ORDERER_PREFERREDMAXBYTES=${ORDERER_PREFERREDMAXBYTES}
+        extra_hosts:
+            - "peer0.org1.example.com:172.31.26.5"
+            - "peer1.org1.example.com:172.31.20.177"
+            - "peer2.org1.example.com:172.31.27.143"
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls:/var/hyperledger/tls
@@ -222,6 +234,10 @@ services:
             - ORDERER_GENERAL_GENESISPROFILE=SampleInsecureKafka
             - ORDERER_ABSOLUTEMAXBYTES=${ORDERER_ABSOLUTEMAXBYTES}
             - ORDERER_PREFERREDMAXBYTES=${ORDERER_PREFERREDMAXBYTES}
+        extra_hosts:
+            - "peer0.org1.example.com:172.31.26.5"
+            - "peer1.org1.example.com:172.31.20.177"
+            - "peer2.org1.example.com:172.31.27.143"
         volumes:
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/msp
             - ../crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls:/var/hyperledger/tls
@@ -237,107 +253,3 @@ services:
                - ${CORE_PEER_NETWORKID}
         ports:
           - 9050:7050
-
-    peer0.org1.example.com:
-        extends:
-            file: docker-compose-base.yml
-            service: peer
-        container_name: peer0.org1.example.com
-        environment:
-            - CORE_PEER_CHAINCODELISTENADDRESS=peer0.org1.example.com:7052
-            - CORE_PEER_ID=peer0.org1.example.com
-            - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-            - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org1.example.com:7051
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
-            - CORE_PEER_GOSSIP_ORGLEADER=${CORE_PEER_GOSSIP_ORGLEADER_PEER0_ORG1}
-            - CORE_PEER_GOSSIP_USELEADERELECTION=${CORE_PEER_GOSSIP_USELEADERELECTION_PEER0_ORG1}
-            - CORE_PEER_LOCALMSPID=Org1MSP
-            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@org1.example.com/tls/ca.crt
-            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.crt
-            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.key
-        volumes:
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/var/hyperledger/msp
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/var/hyperledger/tls
-            - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../network-config/:/var/hyperledger/configs
-
-        depends_on:
-            - orderer0.example.com
-            - orderer1.example.com
-            - orderer2.example.com
-        networks:
-          behave:
-             aliases:
-               - ${CORE_PEER_NETWORKID}
-        ports:
-          - 7051:7051
-          - 7053:7053
-
-    peer1.org1.example.com:
-        extends:
-            file: docker-compose-base.yml
-            service: peer
-        container_name: peer1.org1.example.com
-        environment:
-            - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org1.example.com:7052
-            - CORE_PEER_ID=peer1.org1.example.com
-            - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
-            - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-            - CORE_PEER_GOSSIP_ORGLEADER=${CORE_PEER_GOSSIP_ORGLEADER_PEER1_ORG1}
-            - CORE_PEER_GOSSIP_USELEADERELECTION=${CORE_PEER_GOSSIP_USELEADERELECTION_PEER1_ORG1}
-            - CORE_PEER_LOCALMSPID=Org1MSP
-            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@org1.example.com/tls/ca.crt
-            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.crt
-            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.key
-        volumes:
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/var/hyperledger/msp
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/var/hyperledger/tls
-            - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../network-config/:/var/hyperledger/configs
-        depends_on:
-            - orderer0.example.com
-            - orderer1.example.com
-            - orderer2.example.com
-            - peer0.org1.example.com
-        networks:
-          behave:
-             aliases:
-               - ${CORE_PEER_NETWORKID}
-        ports:
-          - 8051:7051
-          - 8053:7053
-
-
-    peer2.org1.example.com:
-        extends:
-            file: docker-compose-base.yml
-            service: peer
-        container_name: peer2.org1.example.com
-        environment:
-            - CORE_PEER_CHAINCODELISTENADDRESS=peer2.org1.example.com:7052
-            - CORE_PEER_ID=peer2.org1.example.com
-            - CORE_PEER_ADDRESS=peer2.org1.example.com:7051
-            - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-            - CORE_PEER_GOSSIP_ORGLEADER=${CORE_PEER_GOSSIP_ORGLEADER_PEER2_ORG1}
-            - CORE_PEER_GOSSIP_USELEADERELECTION=${CORE_PEER_GOSSIP_USELEADERELECTION_PEER2_ORG1}
-            - CORE_PEER_LOCALMSPID=Org1MSP
-            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@org1.example.com/tls/ca.crt
-            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.crt
-            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@org1.example.com/tls/client.key
-        volumes:
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/msp:/var/hyperledger/msp
-            - ../crypto-config/peerOrganizations/org1.example.com/peers/peer2.org1.example.com/tls:/var/hyperledger/tls
-            - ../crypto-config/peerOrganizations/org1.example.com/users:/var/hyperledger/users
-            - ../network-config/:/var/hyperledger/configs
-        depends_on:
-            - orderer0.example.com
-            - orderer1.example.com
-            - orderer2.example.com
-            - peer0.org1.example.com
-        networks:
-          behave:
-             aliases:
-               - ${CORE_PEER_NETWORKID}
-        ports:
-          - 9051:7051
-          - 9053:7053
